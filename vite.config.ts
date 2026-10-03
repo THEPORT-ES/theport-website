@@ -6,5 +6,6 @@ import { defineConfig } from 'vite'
 // For project-page preview without CNAME, set VITE_BASE=/theport/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  optimizeDeps: { exclude: ['maplibre-gl'] },
   base: process.env.VITE_BASE || '/',
 })

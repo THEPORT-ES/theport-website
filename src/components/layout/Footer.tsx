@@ -8,16 +8,16 @@ export function Footer() {
         <div className="space-y-6">
           <BrandMark />
           <p className="max-w-sm text-sm leading-relaxed text-mist">
-            The digital identity of El Puerto de la Torre.
+            La identidad digital de El Puerto de la Torre.
           </p>
           <p className="label-caps text-[0.6rem] text-mist/70">
-            {SITE.postalCode} · {SITE.city.toUpperCase()} · {SITE.country.toUpperCase()}
+            {SITE.postalCode} · {SITE.city.toUpperCase()} · ESPAÑA
           </p>
         </div>
 
         <div className="flex flex-col gap-8 sm:flex-row sm:gap-16">
           <div className="space-y-3">
-            <p className="label-caps text-mist">Connect</p>
+            <p className="label-caps text-mist">Contacto</p>
             <ul className="space-y-2 text-sm text-silver">
               <li>
                 <a
@@ -55,7 +55,7 @@ export function Footer() {
               © {new Date().getFullYear()} {SITE.name}
             </p>
             <p className="text-sm text-mist">
-              by{' '}
+              por{' '}
               <a
                 href={SITE.author.url}
                 target="_blank"

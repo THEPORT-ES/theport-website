@@ -1,193 +1,27 @@
+import { businesses } from './businesses'
 import type { PortEntity } from '../types/port'
 
-/**
- * Mock entities for THE PORT MAP.
- * Coordinates are approximate and fictional for development.
- * Replace this module with a Supabase/API fetch later.
- */
-export const entities: PortEntity[] = [
-  {
-    id: 'p-01',
-    name: 'María Solís',
-    category: 'people',
-    subcategory: 'Creator',
-    description: 'Diseñadora y narradora visual del barrio.',
-    coordinates: [-4.4912, 36.771],
-    locationLabel: '29190 Málaga',
-    instagram: 'https://instagram.com',
-    featured: true,
-  },
-  {
-    id: 'p-02',
-    name: 'Leo Navarro',
-    category: 'people',
-    subcategory: 'Founder',
-    description: 'Emprendedor. Construye productos locales con ambición global.',
-    coordinates: [-4.496, 36.7682],
-    locationLabel: '29190 Málaga',
-    website: 'https://theport.es',
-  },
-  {
-    id: 'p-03',
-    name: 'Aina Romero',
-    category: 'people',
-    subcategory: 'Athlete',
-    description: 'Deportista y referente de movimiento en 29190.',
-    coordinates: [-4.4895, 36.7668],
-    locationLabel: '29190 Málaga',
-  },
-  {
-    id: 'b-01',
-    name: 'Northline Studio',
-    category: 'business',
-    subcategory: 'Studio',
-    description: 'Estudio creativo. Identidad, producto y espacios.',
-    coordinates: [-4.4948, 36.7705],
-    locationLabel: 'Calle ficticia 12',
-    website: 'https://theport.es',
-    instagram: 'https://instagram.com',
-    featured: true,
-  },
-  {
-    id: 'b-02',
-    name: 'Atlas Workshop',
-    category: 'business',
-    subcategory: 'Workshop',
-    description: 'Taller de diseño y fabricación local.',
-    coordinates: [-4.4982, 36.7675],
-    locationLabel: '29190 Málaga',
-  },
-  {
-    id: 'b-03',
-    name: 'Harbour Tech',
-    category: 'business',
-    subcategory: 'Technology',
-    description: 'Software y sistemas para negocios del barrio.',
-    coordinates: [-4.4901, 36.773],
-    locationLabel: '29190 Málaga',
-    website: 'https://theport.es',
-  },
-  {
-    id: 'pl-01',
-    name: 'Mirador 29190',
-    category: 'places',
-    subcategory: 'Viewpoint',
-    description: 'Un punto alto. Ciudad al fondo. Silencio delante.',
-    coordinates: [-4.5005, 36.7722],
-    locationLabel: 'Zona norte',
-    featured: true,
-  },
-  {
-    id: 'pl-02',
-    name: 'Plaza del Puerto',
-    category: 'places',
-    subcategory: 'Square',
-    description: 'El cruce natural del barrio. Encuentros y ritmo.',
-    coordinates: [-4.4936, 36.7694],
-    locationLabel: 'Centro 29190',
-  },
-  {
-    id: 'f-01',
-    name: 'Café Latitud',
-    category: 'food',
-    subcategory: 'Coffee',
-    description: 'Café de especialidad. Mesa larga. Buenas conversaciones.',
-    coordinates: [-4.492, 36.7688],
-    locationLabel: '29190 Málaga',
-    instagram: 'https://instagram.com',
-    featured: true,
-  },
-  {
-    id: 'f-02',
-    name: 'Horno Sur',
-    category: 'food',
-    subcategory: 'Bakery',
-    description: 'Pan de masa madre y mañana temprana.',
-    coordinates: [-4.4955, 36.766],
-    locationLabel: '29190 Málaga',
-  },
-  {
-    id: 'f-03',
-    name: 'Mesa Abierta',
-    category: 'food',
-    subcategory: 'Restaurant',
-    description: 'Cocina de temporada con producto de cercanía.',
-    coordinates: [-4.4878, 36.7702],
-    locationLabel: '29190 Málaga',
-  },
-  {
-    id: 's-01',
-    name: 'Vector Legal',
-    category: 'services',
-    subcategory: 'Legal',
-    description: 'Asesoría clara para proyectos que empiezan.',
-    coordinates: [-4.497, 36.7718],
-    locationLabel: '29190 Málaga',
-    website: 'https://theport.es',
-  },
-  {
-    id: 's-02',
-    name: 'Pulse Fitness',
-    category: 'services',
-    subcategory: 'Wellness',
-    description: 'Entrenamiento y bienestar en el corazón del barrio.',
-    coordinates: [-4.4918, 36.7655],
-    locationLabel: '29190 Málaga',
-  },
-  {
-    id: 'e-01',
-    name: 'Night Market 29190',
-    category: 'events',
-    subcategory: 'Market',
-    description: 'Mercado nocturno. Música, comida y gente del Puerto.',
-    coordinates: [-4.494, 36.769],
-    locationLabel: 'Plaza del Puerto',
-    featured: true,
-  },
-  {
-    id: 'e-02',
-    name: 'Open Studio Walk',
-    category: 'events',
-    subcategory: 'Culture',
-    description: 'Recorrido por talleres y espacios creativos abiertos.',
-    coordinates: [-4.4965, 36.768],
-    locationLabel: 'Varias ubicaciones',
-  },
-  {
-    id: 'pr-01',
-    name: 'Green Corridor',
-    category: 'projects',
-    subcategory: 'Urban',
-    description: 'Proyecto ciudadano para conectar zonas verdes del barrio.',
-    coordinates: [-4.499, 36.7708],
-    locationLabel: '29190 Málaga',
-    featured: true,
-  },
-  {
-    id: 'pr-02',
-    name: 'Port Signal',
-    category: 'projects',
-    subcategory: 'Digital',
-    description: 'Señalética digital y puntos de descubrimiento local.',
-    coordinates: [-4.4928, 36.7725],
-    locationLabel: '29190 Málaga',
-  },
-  {
-    id: 'c-01',
-    name: 'Vecinos Conectados',
-    category: 'community',
-    subcategory: 'Initiative',
-    description: 'Red de vecinos para iniciativas y apoyo mutuo.',
-    coordinates: [-4.4888, 36.7685],
-    locationLabel: '29190 Málaga',
-  },
-]
+/** Map pins are derived from the same five local listings used by the directory. */
+export const entities: PortEntity[] = businesses.map((business) => ({
+  id: business.entityId ?? business.id,
+  name: business.name,
+  category: 'food',
+  subcategory: business.category,
+  description: business.description,
+  coordinates: business.coordinates,
+  locationLabel: business.locationLabel,
+  featured: true,
+  rating: business.rating,
+  reviewCount: Number(business.ratingSource.replace(/\D/g, '')),
+  ratingSource: business.ratingSource,
+  ratingSourceUrl: business.ratingSourceUrl,
+}))
 
 export function getEntitiesByCategory(category: string): PortEntity[] {
   if (category === 'all') return entities
-  return entities.filter((e) => e.category === category)
+  return entities.filter((entity) => entity.category === category)
 }
 
 export function getEntityById(id: string): PortEntity | undefined {
-  return entities.find((e) => e.id === id)
+  return entities.find((entity) => entity.id === id)
 }

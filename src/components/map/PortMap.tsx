@@ -1,22 +1,32 @@
-import maplibregl, {
-  type GeoJSONSource,
-  type Map as MapLibreMap,
-  type MapLayerMouseEvent,
+import * as maplibregl from 'maplibre-gl'
+import { setWorkerUrl } from 'maplibre-gl'
+import mapWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url'
+import type {
+  GeoJSONSource,
+  Map as MapLibreMap,
+  MapLayerMouseEvent,
 } from 'maplibre-gl'
+import type { FeatureCollection, LineString, Point } from 'geojson'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { getEntitiesByCategory } from '../../data/repository'
 import {
-  MAP_STYLE_URL,
+  MAP_STYLE_DARK,
+  MAP_STYLE_LIGHT,
   PORT_CENTER,
   PORT_DEFAULT_ZOOM,
   PORT_MAX_ZOOM,
   PORT_MIN_ZOOM,
+  PORT_BOUNDS,
   type MapFilter,
 } from '../../lib/constants'
 import type { PortEntity } from '../../types/port'
+import { usePortTheme } from '../../lib/theme'
 import { categoryColor } from './categoryStyles'
 import { EntitySheet } from './EntitySheet'
 import { MapFilters } from './MapFilters'
+
+// MapLibre v6 requires Vite to bundle its worker explicitly.
+setWorkerUrl(mapWorkerUrl)
 
 type Props = {
   initialFilter?: MapFilter
@@ -24,9 +34,10 @@ type Props = {
   showFilters?: boolean
   interactive?: boolean
   preview?: boolean
+  selectedEntityId?: string
 }
 
-function toFeatureCollection(items: PortEntity[]): GeoJSON.FeatureCollection {
+function toFeatureCollection(items: PortEntity[]): FeatureCollection<Point> {
   return {
     type: 'FeatureCollection',
     features: items.map((item) => ({
@@ -46,7 +57,7 @@ function toFeatureCollection(items: PortEntity[]): GeoJSON.FeatureCollection {
   }
 }
 
-function toLinkCollection(items: PortEntity[]): GeoJSON.FeatureCollection {
+function toLinkCollection(items: PortEntity[]): FeatureCollection<LineString> {
   const sample = items.slice(0, Math.min(items.length, 10))
   return {
     type: 'FeatureCollection',
@@ -70,6 +81,7 @@ export function PortMap({
   showFilters = true,
   interactive = true,
   preview = false,
+  selectedEntityId,
 }: Props) {
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
@@ -77,6 +89,7 @@ export function PortMap({
   const [filter, setFilter] = useState<MapFilter>(initialFilter)
   const [selected, setSelected] = useState<PortEntity | null>(null)
   const [ready, setReady] = useState(false)
+  const theme = usePortTheme()
 
   const filtered = useMemo(() => getEntitiesByCategory(filter), [filter])
   entitiesRef.current = filtered
@@ -90,9 +103,10 @@ export function PortMap({
 
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: MAP_STYLE_URL,
+      style: theme === 'dark' ? MAP_STYLE_DARK : MAP_STYLE_LIGHT,
       center: PORT_CENTER,
-      zoom: preview ? 12.4 : PORT_DEFAULT_ZOOM,
+      maxBounds: PORT_BOUNDS,
+      zoom: preview ? 13.5 : PORT_DEFAULT_ZOOM,
       minZoom: PORT_MIN_ZOOM,
       maxZoom: PORT_MAX_ZOOM,
       attributionControl: { compact: true },
@@ -191,7 +205,7 @@ export function PortMap({
     const onClick = (e: MapLayerMouseEvent) => {
       const feature = e.features?.[0]
       const id = feature?.properties?.id as string | undefined
-      if (!id) return
+      if (!id || !feature) return
 
       const entity = entitiesRef.current.find((item) => item.id === id) ?? null
       setSelected(entity)
@@ -205,7 +219,7 @@ export function PortMap({
 
       const coords =
         entity?.coordinates ??
-        ((feature.geometry as GeoJSON.Point).coordinates as [number, number])
+        (feature.geometry as Point).coordinates as [number, number]
 
       map.easeTo({
         center: coords,
@@ -224,7 +238,7 @@ export function PortMap({
       map.remove()
       mapRef.current = null
     }
-  }, [interactive, preview])
+  }, [interactive, preview, theme])
 
   useEffect(() => {
     const map = mapRef.current
@@ -236,6 +250,16 @@ export function PortMap({
     links?.setData(toLinkCollection(filtered))
     setSelected(null)
   }, [filtered, ready])
+
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !ready || !selectedEntityId) return
+    const entity = entitiesRef.current.find((item) => item.id === selectedEntityId)
+    if (!entity) return
+    setSelected(entity)
+    map.setFeatureState({ source: 'port-entities', id: entity.id }, { selected: true })
+    map.easeTo({ center: entity.coordinates, zoom: Math.max(map.getZoom(), 14.2), duration: 800 })
+  }, [ready, selectedEntityId])
 
   const resetView = () => {
     const map = mapRef.current
@@ -260,8 +284,8 @@ export function PortMap({
     <div className={`relative h-full w-full overflow-hidden bg-ink ${className}`}>
       <div ref={containerRef} className="absolute inset-0 h-full w-full" />
 
-      <div className="pointer-events-none absolute inset-0 port-vignette" />
-      <div className="pointer-events-none absolute inset-0 port-noise opacity-40" />
+      <div className="pointer-events-none absolute inset-0 port-vignette opacity-25" />
+      <div className="pointer-events-none absolute inset-0 port-noise opacity-10" />
 
       {showFilters && (
         <div className="absolute inset-x-0 top-0 z-10 bg-gradient-to-b from-void via-void/80 to-transparent px-4 pb-10 pt-20 sm:px-6 md:pt-24">
@@ -272,7 +296,7 @@ export function PortMap({
               onClick={resetView}
               className="self-start rounded-full border border-line bg-panel/80 px-4 py-2 text-[0.65rem] tracking-[0.18em] uppercase text-mist backdrop-blur-md transition-colors hover:text-snow md:self-auto"
             >
-              Reset view
+              Volver al inicio
             </button>
           </div>
         </div>

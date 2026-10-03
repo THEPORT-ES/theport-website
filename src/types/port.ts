@@ -20,6 +20,10 @@ export type PortEntity = {
   website?: string
   instagram?: string
   featured?: boolean
+  rating?: number
+  reviewCount?: number
+  ratingSource?: string
+  ratingSourceUrl?: string
 }
 
 export type PersonProfile = {
@@ -45,6 +49,9 @@ export type BusinessProfile = {
   website?: string
   instagram?: string
   entityId?: string
+  coordinates: [number, number]
+  ratingSource: string
+  ratingSourceUrl: string
 }
 
 export type DiscoverCard = {

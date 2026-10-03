@@ -1,16 +1,19 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { Menu, Moon, Sun, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { NAV_LINKS } from '../../lib/constants'
 import { cn } from '../../lib/cn'
 import { BrandMark } from '../ui/BrandMark'
 import { ButtonLink } from '../ui/Button'
+import { setPortTheme, usePortTheme } from '../../lib/theme'
 
 export function Header() {
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const location = useLocation()
+  const theme = usePortTheme()
+  const darkOverlay = location.pathname === '/' && !scrolled
 
   useEffect(() => {
     setOpen(false)
@@ -36,14 +39,15 @@ export function Header() {
         className={cn(
           'fixed inset-x-0 top-0 z-50 transition-all duration-500',
           scrolled || open
-            ? 'bg-void/80 backdrop-blur-xl border-b border-white/[0.06]'
+            ? 'bg-void/80 backdrop-blur-xl border-b border-line/70'
             : 'bg-transparent',
         )}
+        data-dark-overlay={darkOverlay ? 'true' : undefined}
       >
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:h-[4.5rem] sm:px-8">
           <BrandMark compact />
 
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-8 lg:flex" aria-label="Navegación principal">
             {NAV_LINKS.filter((l) => l.to !== '/join').map((link) => (
               <NavLink
                 key={link.to}
@@ -60,28 +64,28 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="hidden lg:block">
-            <ButtonLink to="/join" size="sm">
-              Join the Port
-            </ButtonLink>
+          <div className="hidden items-center gap-3 lg:flex">
+            <button type="button" onClick={() => setPortTheme(theme === 'dark' ? 'light' : 'dark')} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-mist transition hover:text-snow" aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'} title={theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}>
+              {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
+            <ButtonLink to="/join" size="sm">Súmate</ButtonLink>
           </div>
 
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-snow lg:hidden"
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X size={18} /> : <Menu size={18} />}
-          </button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <button type="button" onClick={() => setPortTheme(theme === 'dark' ? 'light' : 'dark')} className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-snow" aria-label={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}>
+              {theme === 'dark' ? <Sun size={17} /> : <Moon size={17} />}
+            </button>
+            <button type="button" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-snow" aria-label={open ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+              {open ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
         </div>
       </header>
 
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-0 z-40 bg-void/95 backdrop-blur-2xl lg:hidden"
+            className="fixed inset-0 z-[45] bg-void/95 backdrop-blur-2xl lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -89,7 +93,7 @@ export function Header() {
           >
             <nav
               className="flex h-full flex-col justify-center gap-2 px-8 pt-16"
-              aria-label="Mobile"
+              aria-label="Navegación móvil"
             >
               {NAV_LINKS.map((link, i) => (
                 <motion.div

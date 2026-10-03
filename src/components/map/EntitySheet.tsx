@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { ExternalLink, Instagram, MapPin, X } from 'lucide-react'
+import { Camera, ExternalLink, MapPin, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { CATEGORY_LABELS } from '../../lib/constants'
 import type { PortEntity } from '../../types/port'
@@ -17,7 +17,7 @@ export function EntitySheet({ entity, onClose }: Props) {
         <>
           <motion.button
             type="button"
-            aria-label="Close"
+            aria-label="Cerrar"
             className="fixed inset-0 z-40 bg-black/40 md:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -29,7 +29,7 @@ export function EntitySheet({ entity, onClose }: Props) {
             role="dialog"
             aria-modal="true"
             aria-label={entity.name}
-            className="fixed inset-x-0 bottom-0 z-50 max-h-[70dvh] overflow-auto rounded-t-3xl border border-line bg-panel p-6 shadow-2xl md:absolute md:inset-auto md:right-6 md:top-28 md:bottom-auto md:w-[22rem] md:max-h-[calc(100dvh-8rem)] md:rounded-2xl"
+            className="fixed inset-x-0 bottom-0 z-50 max-h-[70dvh] overflow-auto rounded-t-3xl border border-line bg-panel px-6 pb-[calc(1.5rem+env(safe-area-inset-bottom))] pt-6 shadow-2xl md:absolute md:inset-auto md:right-6 md:top-28 md:bottom-auto md:w-[22rem] md:max-h-[calc(100dvh-8rem)] md:rounded-2xl md:pb-6"
             initial={{ y: '100%', opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0 }}
@@ -52,13 +52,20 @@ export function EntitySheet({ entity, onClose }: Props) {
                 type="button"
                 onClick={onClose}
                 className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line text-mist hover:text-snow"
-                aria-label="Close panel"
+                aria-label="Cerrar ficha"
               >
                 <X size={16} />
               </button>
             </div>
 
             <p className="text-sm leading-relaxed text-silver">{entity.description}</p>
+
+            {entity.rating !== undefined && (
+              <div className="mt-5 border-y border-line py-3">
+                <p className="text-lg text-snow">{entity.rating.toFixed(1)} <span className="text-xs text-mist">/ 10 · {entity.ratingSource}</span></p>
+                {entity.ratingSourceUrl && <a href={entity.ratingSourceUrl} target="_blank" rel="noreferrer" className="mt-1 inline-block text-xs text-mist underline underline-offset-4 hover:text-snow">Fuente: Toppings &amp; Salads</a>}
+              </div>
+            )}
 
             {entity.locationLabel && (
               <p className="mt-5 flex items-center gap-2 text-sm text-mist">
@@ -75,7 +82,7 @@ export function EntitySheet({ entity, onClose }: Props) {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-xs tracking-[0.14em] uppercase text-mist transition-colors hover:text-snow"
                 >
-                  <Instagram size={14} /> Instagram
+                  <Camera size={14} /> Instagram
                 </a>
               )}
               {entity.website && (
@@ -101,7 +108,7 @@ export function EntitySheet({ entity, onClose }: Props) {
               className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-snow px-5 py-3 text-xs tracking-[0.16em] uppercase text-void transition-transform active:scale-[0.98]"
               onClick={onClose}
             >
-              View profile
+              Ver en el directorio
             </Link>
           </motion.aside>
         </>

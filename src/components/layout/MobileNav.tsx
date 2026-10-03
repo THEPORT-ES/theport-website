@@ -3,17 +3,17 @@ import { NavLink } from 'react-router-dom'
 import { cn } from '../../lib/cn'
 
 const items = [
-  { to: '/map', label: 'MAP', icon: MapIcon },
-  { to: '/discover', label: 'DISCOVER', icon: Compass },
-  { to: '/people', label: 'PEOPLE', icon: Users },
-  { to: '/business', label: 'BUSINESS', icon: Building2 },
+  { to: '/map', label: 'MAPA', icon: MapIcon },
+  { to: '/discover', label: 'VER', icon: Compass },
+  { to: '/people', label: 'GENTE', icon: Users },
+  { to: '/business', label: 'COMER', icon: Building2 },
 ] as const
 
 export function MobileNav() {
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-40 border-t border-white/[0.06] bg-void/90 backdrop-blur-xl lg:hidden"
-      aria-label="Bottom"
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-line/70 bg-void/90 backdrop-blur-xl lg:hidden"
+      aria-label="Navegación inferior"
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
     >
       <ul className="mx-auto grid max-w-lg grid-cols-4 px-2 py-2">

@@ -10,11 +10,11 @@ type Props = {
 export function MapFilters({ value, onChange, className }: Props) {
   return (
     <div className={cn('w-full', className)}>
-      <p className="mb-3 label-caps text-[0.6rem] text-mist">MAP</p>
+      <p className="mb-3 label-caps text-[0.6rem] text-mist">FILTRAR POR</p>
       <div
         className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         role="tablist"
-        aria-label="Map categories"
+        aria-label="Filtrar puntos del mapa por categoría"
       >
         {MAP_FILTERS.map((filter) => {
           const active = value === filter
